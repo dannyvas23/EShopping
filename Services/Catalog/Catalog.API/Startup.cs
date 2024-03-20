@@ -20,8 +20,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
-
         services.AddApiVersioning(opt =>
         {
             opt.DefaultApiVersion = new ApiVersion(1, 0);
@@ -40,13 +38,13 @@ public class Startup
 
         //services.AddMediatR(typeof(CreateProductHandler).GetTypeInfo().Assembly); //--Anteriores versiones, en la prox linea es la sintaxis para registrar
         //todos los handlers, comandos, consultas, etc dentro del ensamblado especificado al iniciar la aplicación.
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddMediatR((x => x.RegisterServicesFromAssemblies(typeof(CreateProductHandler).Assembly)));
         services.AddScoped<ICatalogContext, CatalogContext>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IBrandRepository, ProductRepository>();
         services.AddScoped<ITypesRepository, ProductRepository>();
 
-
+        services.AddControllers();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,15 +52,15 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
         }
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
 
         app.UseHttpsRedirection();
         app.UseRouting();
         // app.UseCors("CorsPolicy");
         app.UseAuthentication();
-        //app.UseStaticFiles();
+        app.UseStaticFiles();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
