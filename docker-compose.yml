@@ -6,6 +6,14 @@ services:
     
   basketdb:
     image: redis:alpine  
+    
+  discountdb:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    
+  pgadmin:
+    image: dpage/pgadmin4
   
   portainer:
     image: portainer/portainer-ce
@@ -21,8 +29,14 @@ services:
     build:
       context: .
       dockerfile: Services/Basket/Basket.API/Dockerfile
-      
+  
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.API/Dockerfile
 volumes:
   mongo_data:
   portainer_data:
-  
+  local_pgdata:
+  pgadmin_data:
