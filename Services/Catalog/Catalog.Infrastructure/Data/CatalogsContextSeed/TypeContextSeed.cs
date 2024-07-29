@@ -2,7 +2,7 @@ using System.Text.Json;
 using Catalog.Core.Entities;
 using MongoDB.Driver;
 
-namespace Catalog.Infrastructure.Data;
+namespace Catalog.Infrastructure.Data.CatalogsContextSeed;
 
 public class TypeContextSeed
 {
@@ -12,7 +12,12 @@ public class TypeContextSeed
         // path = Path.Combine("Data", "SeedData", "types.json");
         if (!checkTypes)
         {
-            var typesData = File.ReadAllText("../Catalog,Infraestructure/Data/SeedData/types.json");
+           //var typesData = File.ReadAllText("Services/Catalog/Catalog.Infrastructure/Data/SeedData/types.json");
+           
+           var basePath = AppDomain.CurrentDomain.BaseDirectory;
+           var filePath = Path.Combine(basePath, "Services","Catalog", "Catalog.Infrastructure", "Data", "SeedData", "types.json");
+           var typesData = File.ReadAllText(filePath);
+           
             var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
             if (types != null)
             {

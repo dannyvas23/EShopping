@@ -23,6 +23,8 @@ services:
     build:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
+    volumes:
+      - ./Services/Catalog/Catalog.Infrastructure/Data/SeedData:/app/Services/Catalog/Catalog.Infrastructure/Data/SeedData
   
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
